@@ -1,0 +1,21 @@
+name: FB Slots Scheduler
+
+on:
+  schedule:
+    - cron: '0 * * * *' # 每小时整点触发
+  workflow_dispatch: # 支持手动触发测试
+
+jobs:
+  run-scheduler:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Run scheduler
+        run: node scripts/scheduler.js
+        env:
+          META_ACCESS_TOKEN: ${{ secrets.META_ACCESS_TOKEN }}
+          AD_ACCOUNT_IDS: ${{ secrets.AD_ACCOUNT_IDS }}
+          DAILY_BUDGET_CENTS: ${{ secrets.DAILY_BUDGET_CENTS }}
